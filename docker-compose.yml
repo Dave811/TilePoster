@@ -1,0 +1,6 @@
+services:
+  tileposter:
+    image: "ghcr.io/dave811/tileposter:${TAG:-latest}"
+    restart: unless-stopped
+    ports:
+      - "8080:80"

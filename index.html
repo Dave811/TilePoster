@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d6b50'/%3E%3Cpath d='M18 13h22l8 8v30H18z' fill='white'/%3E%3Cpath d='M40 13v10h8' fill='none' stroke='%230d6b50' stroke-width='4'/%3E%3Cpath d='M24 32h18M24 39h18' stroke='%230d6b50' stroke-width='4'/%3E%3C/svg%3E" />
+    <title>TilePoster</title>
+  </head>
+  <body>
+    <main class="app">
+      <aside class="panel">
+        <header>
+          <p class="eyebrow">PDF-WERKZEUG</p>
+          <h1>TilePoster</h1>
+          <p class="intro">Große PDF-Seiten auf mehrere kleine Blätter verteilen.</p>
+        </header>
+
+        <label class="file-drop" id="drop-zone">
+          <input id="file-input" type="file" accept="application/pdf,.pdf" />
+          <span class="file-icon">PDF</span>
+          <strong id="file-label">PDF auswählen</strong>
+          <small>oder hier ablegen</small>
+        </label>
+
+        <section class="controls">
+          <h2>Druckbogen</h2>
+          <div class="row">
+            <label>Papierformat
+              <select id="paper-size">
+                <option value="a4">A4</option>
+                <option value="a3">A3</option>
+                <option value="letter">Letter</option>
+              </select>
+            </label>
+            <label>Ausrichtung
+              <select id="orientation">
+                <option value="auto">Automatisch (wenigste Blätter)</option>
+                <option value="portrait">Hochformat</option>
+                <option value="landscape">Querformat</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="row">
+            <label>Rand <output id="margin-out">10 mm</output>
+              <input id="margin" type="range" min="0" max="30" value="10" step="1" />
+            </label>
+            <label>Überlappung <output id="overlap-out">5 mm</output>
+              <input id="overlap" type="range" min="0" max="20" value="5" step="1" />
+            </label>
+          </div>
+
+          <h2>Dokument</h2>
+          <label>Skalierung <output id="scale-out">100 %</output>
+            <input id="scale" type="range" min="10" max="300" value="100" step="1" />
+          </label>
+          <h2>Zuschneiden (mm)</h2>
+          <div class="crop-grid">
+            <label>Oben <input id="crop-top" type="number" value="0" min="0" step="1" /></label>
+            <label>Rechts <input id="crop-right" type="number" value="0" min="0" step="1" /></label>
+            <label>Unten <input id="crop-bottom" type="number" value="0" min="0" step="1" /></label>
+            <label>Links <input id="crop-left" type="number" value="0" min="0" step="1" /></label>
+          </div>
+          <div class="row">
+            <label>X-Position (mm)
+              <input id="offset-x" type="number" value="0" step="1" />
+            </label>
+            <label>Y-Position (mm)
+              <input id="offset-y" type="number" value="0" step="1" />
+            </label>
+          </div>
+          <div class="cut-side-control">
+            <span>Schnittkanten</span>
+            <div class="cut-side-buttons">
+              <label><input name="cut-corner" type="radio" value="top-left" checked /><span>↖<small>Links · oben</small></span></label>
+              <label><input name="cut-corner" type="radio" value="top-right" /><span>↗<small>Oben · rechts</small></span></label>
+              <label><input name="cut-corner" type="radio" value="bottom-left" /><span>↙<small>Unten · links</small></span></label>
+              <label><input name="cut-corner" type="radio" value="bottom-right" /><span>↘<small>Rechts · unten</small></span></label>
+            </div>
+          </div>
+        </section>
+
+        <div class="summary" id="summary">Bitte zuerst eine PDF auswählen.</div>
+        <button id="export" class="export" disabled>Gekachelte PDF exportieren</button>
+        <p class="privacy">Alles bleibt lokal auf diesem Gerät.</p>
+      </aside>
+
+      <section class="workspace">
+        <div class="toolbar">
+          <span>Vorschau · Seite 1</span>
+          <button id="center" disabled>Zentrieren</button>
+        </div>
+        <div class="viewport" id="viewport">
+          <div class="empty-state" id="empty-state">
+            <div class="empty-grid"></div>
+            <strong>PDF laden und anschließend hier verschieben</strong>
+            <span>Die gestrichelten Linien zeigen die späteren Druckseiten.</span>
+          </div>
+          <div id="board-frame" class="board-frame hidden">
+            <div id="board" class="board">
+              <canvas id="preview" draggable="false"></canvas>
+              <div id="sheet-overlay" class="sheet-overlay" aria-hidden="true"></div>
+              <div id="crop-box" class="crop-box" aria-label="Zuschneidebereich">
+                <div class="crop-handle crop-handle-top" data-edge="top"></div>
+                <div class="crop-handle crop-handle-right" data-edge="right"></div>
+                <div class="crop-handle crop-handle-bottom" data-edge="bottom"></div>
+                <div class="crop-handle crop-handle-left" data-edge="left"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <canvas id="crop-magnifier" class="crop-magnifier" width="160" height="160" aria-hidden="true"></canvas>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

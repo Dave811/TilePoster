@@ -1,0 +1,79 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #1b2522;
+  background: #e8ece9;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 1024px; min-height: 100vh; }
+button, input, select { font: inherit; }
+
+.app { display: grid; grid-template-columns: 340px 1fr; min-height: 100vh; }
+.panel { padding: 32px; background: #f8f6f0; border-right: 1px solid #cad1cc; overflow-y: auto; }
+.eyebrow { margin: 0 0 5px; color: #0d6b50; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
+h1 { margin: 0; font-family: Georgia, serif; font-size: 34px; font-weight: 500; }
+.intro { margin: 8px 0 25px; color: #65706c; line-height: 1.45; }
+
+.file-drop { display: grid; place-items: center; min-height: 135px; border: 1.5px dashed #8ca198; border-radius: 12px; background: #eef3ee; cursor: pointer; transition: .2s; }
+.file-drop:hover, .file-drop.drag { border-color: #0d6b50; background: #e2eee7; }
+.file-drop input { display: none; }
+.file-drop strong { margin-top: 7px; }
+.file-drop small { color: #718079; }
+.file-icon { padding: 5px 7px; border-radius: 4px; color: white; background: #d55242; font-size: 10px; font-weight: 800; }
+
+.controls { margin-top: 26px; }
+h2 { margin: 23px 0 11px; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; }
+label { display: grid; gap: 7px; color: #4d5a55; font-size: 12px; font-weight: 650; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+.crop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin-bottom: 15px; }
+select, input[type="number"] { width: 100%; padding: 9px 10px; border: 1px solid #c6cec9; border-radius: 7px; color: #1b2522; background: white; }
+input[type="range"] { width: 100%; accent-color: #0d6b50; }
+output { float: right; color: #0d6b50; }
+.check { display: flex; align-items: center; gap: 8px; margin-top: 18px; }
+.cut-side-control { margin-top: 18px; color: #4d5a55; font-size: 12px; font-weight: 650; }
+.cut-side-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 7px; }
+.cut-side-buttons label { display: block; }
+.cut-side-buttons input { position: absolute; opacity: 0; pointer-events: none; }
+.cut-side-buttons span { display: grid; place-items: center; min-height: 52px; padding: 5px; border: 1px solid #bdc8c2; border-radius: 6px; background: white; font-size: 20px; line-height: 1; text-align: center; cursor: pointer; }
+.cut-side-buttons small { font-size: 9px; font-weight: 650; line-height: 1.2; }
+.cut-side-buttons input:checked + span { border-color: #0d6b50; color: white; background: #0d6b50; }
+.cut-side-buttons input:focus-visible + span { outline: 2px solid #0d6b50; outline-offset: 2px; }
+.summary { margin-top: 24px; padding: 12px; border-radius: 8px; color: #51605a; background: #e9ede9; font-size: 12px; line-height: 1.5; }
+.export { width: 100%; margin-top: 14px; padding: 13px; border: 0; border-radius: 8px; color: white; background: #0d6b50; font-weight: 750; cursor: pointer; }
+.export:hover:not(:disabled) { background: #09543e; }
+.export:disabled { opacity: .4; cursor: not-allowed; }
+.privacy { text-align: center; color: #7c8782; font-size: 11px; }
+
+.workspace { min-width: 0; display: grid; grid-template-rows: 58px 1fr; }
+.toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 25px; background: white; border-bottom: 1px solid #d1d6d3; color: #65706c; font-size: 12px; font-weight: 700; }
+.toolbar button { padding: 7px 12px; border: 1px solid #bdc8c2; border-radius: 6px; color: #34423d; background: white; cursor: pointer; }
+.viewport { position: relative; min-height: 0; overflow: auto; padding: 45px; background-color: #dfe4e1; background-image: radial-gradient(#bcc5c0 1px, transparent 1px); background-size: 18px 18px; }
+.empty-state { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; color: #65716c; text-align: center; }
+.empty-state span { font-size: 12px; }
+.empty-grid { width: 150px; height: 105px; margin-bottom: 15px; border: 2px dashed #8fa099; background: linear-gradient(90deg, transparent 49%, #8fa099 50%, transparent 51%), linear-gradient(transparent 49%, #8fa099 50%, transparent 51%); opacity: .7; }
+.hidden { display: none !important; }
+
+.board-frame { position: relative; margin: 0 auto; }
+.board-frame::before { content: "DRUCKSEITEN"; position: absolute; top: -25px; left: 0; color: #66736d; font-size: 10px; font-weight: 800; letter-spacing: .12em; }
+.board { position: absolute; top: 0; left: 0; overflow: hidden; background-color: #f7f8f6; box-shadow: 0 7px 28px #34403935; }
+#preview { position: absolute; z-index: 1; cursor: grab; box-shadow: 0 3px 14px #2d393543; touch-action: none; user-select: none; -webkit-user-drag: none; }
+#preview.dragging { cursor: grabbing; }
+.sheet-overlay { position: absolute; z-index: 2; inset: 0; overflow: hidden; pointer-events: none; }
+.sheet { position: absolute; border: 1px solid #596761; }
+.crop-box { position: absolute; z-index: 3; border: 2px solid #0d8f68; pointer-events: none; }
+.crop-handle { position: absolute; pointer-events: auto; touch-action: none; }
+.crop-handle::after { content: ""; position: absolute; border-radius: 4px; background: #0d8f68; box-shadow: 0 0 0 2px white; }
+.crop-handle-top, .crop-handle-bottom { left: 12px; right: 12px; height: 14px; cursor: ns-resize; }
+.crop-handle-top { top: -8px; }
+.crop-handle-bottom { bottom: -8px; }
+.crop-handle-top::after, .crop-handle-bottom::after { width: 34px; height: 5px; left: 50%; top: 4px; transform: translateX(-50%); }
+.crop-handle-left, .crop-handle-right { top: 12px; bottom: 12px; width: 14px; cursor: ew-resize; }
+.crop-handle-left { left: -8px; }
+.crop-handle-right { right: -8px; }
+.crop-handle-left::after, .crop-handle-right::after { width: 5px; height: 34px; left: 4px; top: 50%; transform: translateY(-50%); }
+.crop-box.cropping { border-color: #075c45; }
+.crop-magnifier { position: fixed; z-index: 100; display: none; width: 160px; height: 160px; border: 4px solid white; border-radius: 50%; background: white; box-shadow: 0 5px 24px #17231f66, 0 0 0 2px #0d8f68; pointer-events: none; }
+.crop-magnifier.visible { display: block; }
+
+@media (max-width: 1100px) { .app { grid-template-columns: 310px 1fr; } .panel { padding: 24px; } }
