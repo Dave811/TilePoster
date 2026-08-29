@@ -7,6 +7,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const MM_TO_PT = 72 / 25.4;
 const MAX_PREVIEW_PX_PER_MM = 2.2;
+const PREFERRED_PREVIEW_SCALE = 2;
+const MAX_PREVIEW_PIXELS = 8_000_000;
+const MAX_PREVIEW_DIMENSION = 4096;
 const PAPERS = {
   a4: [210, 297],
   a3: [297, 420],
@@ -31,6 +34,15 @@ let sourceSizePt = null;
 let dragging = null;
 let cropDragging = null;
 let previewPxPerMm = MAX_PREVIEW_PX_PER_MM;
+
+function previewRenderScale(width, height) {
+  return Math.min(
+    PREFERRED_PREVIEW_SCALE,
+    MAX_PREVIEW_DIMENSION / width,
+    MAX_PREVIEW_DIMENSION / height,
+    Math.sqrt(MAX_PREVIEW_PIXELS / (width * height)),
+  );
+}
 
 function updateMagnifier(event, edge) {
   const size = ui.magnifier.width;
@@ -165,7 +177,9 @@ async function loadFile(file) {
     const page = await pdf.getPage(1);
     const unitViewport = page.getViewport({ scale: 1 });
     sourceSizePt = { width: unitViewport.width, height: unitViewport.height };
-    const renderScale = 2;
+    // Large-format PDFs can otherwise allocate hundreds of MB for a preview
+    // that is displayed at only a fraction of that resolution.
+    const renderScale = previewRenderScale(unitViewport.width, unitViewport.height);
     const viewport = page.getViewport({ scale: renderScale });
     ui.canvas.width = Math.ceil(viewport.width);
     ui.canvas.height = Math.ceil(viewport.height);
